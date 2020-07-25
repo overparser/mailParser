@@ -1,30 +1,16 @@
 from get_html import GetHtml
 import document
-from FilterMails import FilterMails
 from FilterUrls import FilterUrls
-from get_dirty_mails import get_dirty_mails
 from get_all_links import get_all_links
 import time
+from MailsFromDomainUrls import MailsFromDomainUrls
+from multiprocessing import Pool
 
 domains = document.readDomains('input2.txt')
 start = time.time()
 mails_counter = 0
 
-def mails_from_url_list(url_list):
-    if not url_list:
-        return
 
-    global mails_counter
-    mails_counter += 1
-    html_instance = GetHtml()   # инстанс для подсчета невалидных ссылок в рамках одного домена
-    mail_box = FilterMails()
-    print(f'счетчик доменов поиска почты: {mails_counter} \n', f'прошло времени: {time.time() - start}')
-
-    for i in url_list:
-        dirty_mails = get_dirty_mails(i, html_instance)
-        mail_box.add_mails(dirty_mails)
-    mail_box.filter_mails()
-    return mail_box.get_clear_unique_mails()
 
 links_counter = 0
 def links_from_domain(domain):
@@ -36,9 +22,26 @@ def links_from_domain(domain):
     return box.get_validated_urls()
 
 
-links = list(map(links_from_domain, domains))
-document.writeLines('linksresult.txt', links)
-mails = list(map(mails_from_url_list, links))
+# domains = list(map(links_from_domain, domains))
 
-document.writeLines('mailresult.txt', mails)
-print('конец выполнения:  ', time.time() - start)
+result = []
+# for domain in domains:
+#     inst = MailsFromDomainUrls(domain)
+#     result.extend(inst.multi_threads())
+
+# document.writeLines('mails.txt', result)
+
+
+def multiproc(domain):
+    array = links_from_domain(domain)
+    inst = MailsFromDomainUrls(array)
+    print(time.time() - start)
+    return inst.multi_threads()
+
+if __name__ == '__main__':
+    result = []
+    with Pool(20) as p:
+        _ = [result.extend(i) for i in p.map(multiproc, domains)]
+    print(result)
+    document.writeLines('mails.txt', result)
+    print(time.time() - start)

@@ -1,33 +1,17 @@
 from bs4 import BeautifulSoup
 
-def get_dirty_mails(url, html_instance):
-    html = html_instance.get_html(url)
-    if html:
-        text = BeautifulSoup(html.text, 'lxml')
-        allText = text.findAll(text=True)
-        elements_like_mails = [i for i in allText if '@' in i and '.' in i if len(i) < 200]
+class GetDirtyMails:
+    def __init__(self, html_instance):
+        self.html_instance = html_instance
+        self.all_dirty_mails = []
 
-        return elements_like_mails
-    else:
-        return []
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def place_dirty_mails(self, url):
+        html = self.html_instance.get_html(url)
+        if html:
+            text = BeautifulSoup(html.text, 'lxml')
+            allText = text.findAll(text=True)
+            elements_like_mails = [i for i in allText if '@' in i and '.' in i if len(i) < 200]
+            self.all_dirty_mails.extend(elements_like_mails)
 
 
 # def getMailsWithThreads(urls):

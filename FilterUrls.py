@@ -7,6 +7,7 @@ class FilterUrls:
     def __init__(self, urls):
         if urls:
             self.domain = urls[0]
+            print(self.domain, '        is domain')
         else:
             self.domain = '!!!'
 

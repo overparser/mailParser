@@ -30,10 +30,11 @@ class GetHtml:
         self.errorCounter = 0
         self.session = requests.Session()
         self.session.headers = userAgent
+        self.session.proxies = ''
 
     def domain_counter(self):
-        print('error counter: ', self.errorCounter)
         self.errorCounter += 1
+        print('error counter: ', self.errorCounter)
 
 
 
@@ -43,17 +44,17 @@ class GetHtml:
             return False
 
         if status_code == 500:
+            self.session.proxies = get_proxy()
             try:
-                return self.session.get(url, timeout=3)
+                return self.session.get(url, timeout=4)
             except:
                 return 500
 
 
     def get_html(self, url):
-        if self.errorCounter < 12:
+        if self.errorCounter < 15:
             if 'http://' not in url and 'https://' not in url:
                 url = 'http://' + url
-            print(url)
             try:
                 r = self.session.get(url, timeout=3)
 

@@ -2,7 +2,8 @@ import re
 
 class FilterMails:
     def __init__(self, mails=[]):
-        self.mails = mails
+        self.mails = []
+        self.add_mails(mails)
 
 
     def add_mails(self, mails):
