@@ -1,4 +1,4 @@
-from document import readDomains
+from document import read_lines
 from urllib.parse import urljoin
 import re
 
@@ -7,7 +7,6 @@ class FilterUrls:
     def __init__(self, urls):
         if urls:
             self.domain = urls[0]
-            print(self.domain, '        is domain')
         else:
             self.domain = '!!!'
 
@@ -24,10 +23,13 @@ class FilterUrls:
         result = []
         for url in self.urls:
             if url:
+                if len(url) > 100:   # исправить это место. Регекс зависает на строках более ~150 символов
+                    result.append(url)
+                    continue
                 regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
                 if 'http' not in url:
                     url = url.replace('//', '')
-                url = re.findall(regex, url)
+                url = re.search(regex, url)
                 urls = [x[0] for x in url]
                 if urls:
                     result.extend(urls)

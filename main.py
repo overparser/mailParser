@@ -6,7 +6,7 @@ import time
 from MailsFromDomainUrls import MailsFromDomainUrls
 from multiprocessing import Pool
 
-domains = document.readDomains('input2.txt')
+domains = document.read_lines('input2.txt')
 start = time.time()
 mails_counter = 0
 
@@ -18,7 +18,7 @@ def links_from_domain(domain):
     links_counter += 1
     dirty_links = get_all_links(domain)
     box = FilterUrls(dirty_links)
-    print(f'счетчик доменов ссылок: {links_counter} \n', f'прошло времени: {time.time() - start}')
+    print(f'поиск ссылок: {links_counter} \n', f'прошло времени: {time.time() - start}')
     return box.get_validated_urls()
 
 
@@ -39,9 +39,15 @@ def multiproc(domain):
     return inst.multi_threads()
 
 if __name__ == '__main__':
-    result = []
-    with Pool(20) as p:
-        _ = [result.extend(i) for i in p.map(multiproc, domains)]
-    print(result)
-    document.writeLines('mails.txt', result)
-    print(time.time() - start)
+    domains = document.cutDomains('input2.txt', 1)
+    while domains:
+        result = []
+        start = time.time()
+        with Pool(1) as p:
+            _ = [result.extend(i) for i in p.map(multiproc, domains)]
+        print(result)
+        document.writeLines('mails.txt', result)
+        print('########################################################################')
+        print(time.time() - start)
+        document.writeLines('oldDomains.txt', domains)
+        domains = document.cutDomains('input2.txt', 1)

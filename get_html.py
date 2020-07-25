@@ -1,7 +1,7 @@
 from fake_useragent import UserAgent
 import requests
 from document import writeLine
-from document import readDomains
+from document import read_lines
 import time
 
 ua = UserAgent()
@@ -72,4 +72,5 @@ class GetHtml:
                     writeLine('wrongStatusCode.txt', f'{status} {url}')
                     return False
             return r
+        writeLine('abortedDomain.txt', url)
         return False
