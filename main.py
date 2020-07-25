@@ -39,15 +39,15 @@ def multiproc(domain):
     return inst.multi_threads()
 
 if __name__ == '__main__':
-    domains = document.cutDomains('input2.txt', 1)
+    domains = document.cutDomains('input2.txt', 20)
     while domains:
         result = []
         start = time.time()
-        with Pool(1) as p:
+        with Pool(20) as p:
             _ = [result.extend(i) for i in p.map(multiproc, domains)]
         print(result)
         document.writeLines('mails.txt', result)
         print('########################################################################')
         print(time.time() - start)
         document.writeLines('oldDomains.txt', domains)
-        domains = document.cutDomains('input2.txt', 1)
+        domains = document.cutDomains('input2.txt', 20)

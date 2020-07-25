@@ -128,3 +128,5 @@ um=&ID=345529
 404 http://nisltd.co.uk/login.aspx
 301 https://www.lesjofors-automotive.com/lesjofors-automotive-company/cookies.asp
 403 http://www.city.urbana.il.us
+403 http://www.lymanlumber-wi.com
+404 http://cnanow.cna-aiic.ca

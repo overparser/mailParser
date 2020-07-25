@@ -29,7 +29,7 @@ class FilterUrls:
                 regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
                 if 'http' not in url:
                     url = url.replace('//', '')
-                url = re.search(regex, url)
+                url = re.findall(regex, url)
                 urls = [x[0] for x in url]
                 if urls:
                     result.extend(urls)
