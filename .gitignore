@@ -126,3 +126,4 @@ dmypy.json
 
 # idea
 .idea/
+.idea/vcs.xml
