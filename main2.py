@@ -3,7 +3,7 @@ from get_html import get_html
 import threading
 import time
 from multiprocessing import Pool
-import GetValidatedMails
+import get_dirty_mails
 
 
 # class ParseSite:
@@ -46,6 +46,6 @@ if __name__ == '__main__':
     # domains = readDomains()
     # with Pool(8) as p:
     #     print(p.map(multiproc, domains))
-    test = GetValidatedMails()
+    test = get_dirty_mails()
     q = [test.add_url(i) for i in readDomains()]
     print([i for i in test.mails if i])

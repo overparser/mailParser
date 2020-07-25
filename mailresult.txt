@@ -1,0 +1,10 @@
+[]
+['lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+None
+['info@cooksongold.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+['info@cooksongold.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+['info@cooksongold.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+['info@cooksongold.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+None
+['info@cooksongold.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']
+['info@cooksongold.com', 'support@yealink.com', 'lauraan@marcusevanskl.com', 'annako@marcusevanskl.com']

@@ -1,105 +1,44 @@
-import requests
-from bs4 import BeautifulSoup
-import csv
-from fake_useragent import UserAgent
+from get_html import GetHtml
+import document
+from FilterMails import FilterMails
+from FilterUrls import FilterUrls
+from get_dirty_mails import get_dirty_mails
+from get_all_links import get_all_links
 import time
 
+domains = document.readDomains('input2.txt')
+start = time.time()
+mails_counter = 0
 
-domain = 'https://www.sph.umn.edu/'
-
-ua = UserAgent()
-userAgent = {'User-Agent': ua.chrome}
-proxy = {
-    "http": "http://tuthixen-dest:53d8tl329rrx@45.95.96.237:80",
-    "https": "https://tuthixen-dest:53d8tl329rrx@45.95.96.237:80"
-}
-
-
-def get_html(url):
-    try:
-        r = requests.get(url, userAgent)
-    except:
-        r = requests.get('https://www.google.com/', userAgent)
-        print(url)
-    i = 0
-    while r.status_code != 200 and i < 10:
-        r = requests.get(url, userAgent)
-        i += 1
-        print('status code != 200')
-    return r
-
-
-def get_all_href(url):
-    soup = BeautifulSoup(get_html(url).text, 'lxml')
-    urls = soup.findAll('a')
-    urls = [i.get('href') for i in urls]
-    return urls
-
-
-def href_validation(domain, url):
-    if url == None:
-        return
-    if '#' in url:
+def mails_from_url_list(url_list):
+    if not url_list:
         return
 
-    if 'www' in url or 'http' in url:
-        return url
-    else:
-        return (domain + '/' + url).replace('//', '/').replace('//', '/').replace(':/', '://')
+    global mails_counter
+    mails_counter += 1
+    html_instance = GetHtml()   # инстанс для подсчета невалидных ссылок в рамках одного домена
+    mail_box = FilterMails()
+    print(f'счетчик доменов поиска почты: {mails_counter} \n', f'прошло времени: {time.time() - start}')
 
-def mailValidation(mail):
-    mail = mail.strip()
+    for i in url_list:
+        dirty_mails = get_dirty_mails(i, html_instance)
+        mail_box.add_mails(dirty_mails)
+    mail_box.filter_mails()
+    return mail_box.get_clear_unique_mails()
 
-    if len(mail) > 20:
-        return
-
-    splitDots = mail.split('.')
-    if len(splitDots) > 2:
-        return
-    if not len(splitDots[0]) or not len(splitDots[1]):
-        return
-
-    splitDogs = mail.split('@')
-    if len(splitDogs) > 2:
-        return
-    if not len(splitDogs[0]) or not len(splitDogs[1]):
-        return
-
-    return mail
+links_counter = 0
+def links_from_domain(domain):
+    global links_counter
+    links_counter += 1
+    dirty_links = get_all_links(domain)
+    box = FilterUrls(dirty_links)
+    print(f'счетчик доменов ссылок: {links_counter} \n', f'прошло времени: {time.time() - start}')
+    return box.get_validated_urls()
 
 
-def get_mails(url):
-    text = BeautifulSoup(get_html(url).text, 'lxml')
-    alltext = text.findAll(text=True)
-    mails = [i.strip() for i in alltext if '@' in i and '.' in i]
-    return mails
+links = list(map(links_from_domain, domains))
+document.writeLines('linksresult.txt', links)
+mails = list(map(mails_from_url_list, links))
 
-
-def readDomains(path):
-    with open(path, 'r', encoding='utf8') as file:
-        reader = [i[0] for i in csv.reader(file)]
-    return reader
-
-if __name__ == '__main__':
-    a = readDomains('input2.txt')
-
-    urls = get_all_href(domain)
-    validUrls = [domain]
-    print(urls)
-    for url in urls:
-        validUrls.append(href_validation(domain, url))
-    validUrls = list(set(validUrls))
-    print('найдено ссылок: ', len(validUrls))
-
-    mails = []
-    for url in validUrls:
-        mails.extend(get_mails(url))
-        print(validUrls.index(url), url)
-    mails = list(set(mails))
-    validMail = []
-
-    for mail in mails:
-        validMail.append(mailValidation(mail))
-    validMail = [i for i in validMail if i]
-    print(validMail)
-    print(len(validMail))
+document.writeLines('mailresult.txt', mails)
+print('конец выполнения:  ', time.time() - start)

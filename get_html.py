@@ -28,7 +28,8 @@ def get_proxy():
 class GetHtml:
     def __init__(self):
         self.errorCounter = 0
-
+        self.session = requests.Session()
+        self.session.headers = userAgent
 
     def domain_counter(self):
         print('error counter: ', self.errorCounter)
@@ -43,7 +44,7 @@ class GetHtml:
 
         if status_code == 500:
             try:
-                return requests.get(url, headers=userAgent, proxies=get_proxy(), timeout=3)
+                return self.session.get(url, timeout=3)
             except:
                 return 500
 
@@ -54,7 +55,8 @@ class GetHtml:
                 url = 'http://' + url
             print(url)
             try:
-                r = requests.get(url, headers=userAgent, proxies=get_proxy(), timeout=3)
+                r = self.session.get(url, timeout=3)
+
             except:
                 self.domain_counter()
                 writeLine('timeOutLinks.txt', f'{url}')
