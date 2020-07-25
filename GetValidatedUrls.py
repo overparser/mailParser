@@ -93,6 +93,7 @@ def multiproc(url):
     getMailsWithThreads(list_)
 
 
+
 if __name__ == '__main__':
     with Pool(20) as p:
         p.map(multiproc, domains)
