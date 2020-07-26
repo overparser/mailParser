@@ -23,7 +23,7 @@ def multiproc(domain):
 
 
 
-
+a = 'test123'
 def pool(threads, step):
     domains = document.cut_lines('text_files/input2.txt', step)
     while domains:
