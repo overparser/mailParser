@@ -1,57 +1,60 @@
-from get_html import GetHtml
 import document
-from FilterUrls import FilterUrls
-from get_all_links import get_all_links
+from url_parser.FilterUrls import FilterUrls
+from url_parser.get_all_links import get_all_links
 import time
-from MailsFromDomainUrls import MailsFromDomainUrls
+from mail_parser.ThreadsMailsParser import ThreadsMailsParser
 from multiprocessing import Pool
 
-domains = document.read_lines('input2.txt')
 start = time.time()
 mails_counter = 0
 
 
 
-links_counter = 0
 def links_from_domain(domain):
-    global links_counter
-    links_counter += 1
     dirty_links = get_all_links(domain)
     box = FilterUrls(dirty_links)
-    print(f'поиск ссылок: {links_counter} \n', f'прошло времени: {time.time() - start}')
     return box.get_validated_urls()
-
-
-# domains = list(map(links_from_domain, domains))
-
-result = []
-# for domain in domains:
-#     inst = MailsFromDomainUrls(domain)
-#     result.extend(inst.multi_threads())
-
-# document.writeLines('mails.txt', result)
 
 
 def multiproc(domain):
     array = links_from_domain(domain)
-    inst = MailsFromDomainUrls(array)
-    print(time.time() - start)
+    inst = ThreadsMailsParser(array)
     return inst.multi_threads()
 
-if __name__ == '__main__':
-    domains = document.cutDomains('input2.txt', 30)
+
+
+
+def pool(threads, step):
+    domains = document.cut_lines('text_files/input2.txt', step)
     while domains:
         result = []
         while_start = time.time()
-        with Pool(30) as p:
+        with Pool(threads) as p:
             _ = [result.extend(i) for i in p.map(multiproc, domains)]
         print(result)
-        document.writeLines('mails.txt', result)
+        document.write_lines('text_files/mails.txt', result)
         print('########################################################################')
-        print(time.time() - while_start)
-        document.writeLines('oldDomains.txt', domains)
-        domains = document.cutDomains('input2.txt', 30)
+        print('Времени на последний цикл:  ', time.time() - while_start)
+        document.write_lines('debug_files/oldDomains.txt', domains)
+        domains = document.cut_lines('text_files/input2.txt', step)
 
-print('########################################################################')
-print('########################################################################')
-print(time.time() - start)
+def console(domains_count):
+    mails_count = len((document.read_lines('text_files/mails.txt')))
+    if not mails_count:
+        mails_count = 1
+
+    print('########################################################################')
+    print('Время выполнения: ', time.time() - start)
+    print('доменов проверено: ', domains_count)
+
+    print('Найдено почтовых ящиков: ', mails_count)
+    print('в среднем почтовых ящиков в минуту: ', mails_count // (time.time() - start) * 60)
+
+    print('########################################################################')
+
+if __name__ == '__main__':
+    domains_count = len(document.read_lines('text_files/input2.txt'))
+    pool(30, step=1000)
+    console(domains_count)
+
+

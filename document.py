@@ -9,17 +9,19 @@ def read_lines(path):
     return result
 
 
-def cutDomains(path, count):
+def cut_lines(path, count):
     reader = read_lines(path)
-    writeLines(path, reader[count:], 'w')
+    write_lines(path, reader[count:], 'w')
     return reader[:count]
 
 
-def writeLine(name, string, mod='a'):
-    with open(name, mod, encoding='utf8') as file:
+def write_line(path, string, mod='a'):
+    with open(path, mod, encoding='utf8') as file:
         file.write(str(string) + '\n')
 
-def writeLines(name, strings, mod='a'):
-    with open(name, mod, encoding='utf8') as file:
+
+def write_lines(path, strings, mod='a'):
+    with open(path, mod, encoding='utf8') as file:
         for i in strings:
-            file.write(str(i) + '\n')
+            if i:
+                file.write(str(i) + '\n')

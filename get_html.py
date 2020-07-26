@@ -1,8 +1,6 @@
 from fake_useragent import UserAgent
 import requests
-from document import writeLine
-from document import read_lines
-import time
+from document import write_line
 
 ua = UserAgent()
 userAgent = {'User-Agent': ua.chrome}
@@ -11,7 +9,7 @@ proxy = {
     "https": "https://tuthixen-dest:53d8tl329rrx@45.95.96.237:80"
 }
 
-with open('proxies.txt', 'r') as file:
+with open('text_files/proxies.txt', 'r') as file:
     proxies = file.read().split('\n')
 
 def get_proxy():
@@ -31,6 +29,7 @@ class GetHtml:
         self.session = requests.Session()
         self.session.headers = userAgent
         self.session.proxies = ''
+        self.debug_count = 0
 
     def domain_counter(self):
         self.errorCounter += 1
@@ -62,7 +61,7 @@ class GetHtml:
 
             except:
                 self.domain_counter()
-                writeLine('timeOutLinks.txt', f'{url}')
+                write_line('debug_files/timeOutLinks.txt', f'{url}')
                 return False
             i = 0
             status = r.status_code
@@ -71,8 +70,12 @@ class GetHtml:
                 i += 1
                 if i > 10 or not r:
                     self.domain_counter()
-                    writeLine('wrongStatusCode.txt', f'{status} {url}')
+                    write_line('debug_files/wrongStatusCode.txt', f'{status} {url}')
                     return False
             return r
-        writeLine('abortedDomain.txt', url)
+
+        if not self.debug_count:
+            self.debug_count += 1
+            write_line('debug_files/abortedDomain.txt', url)
+
         return False
