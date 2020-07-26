@@ -6,20 +6,36 @@ from get_dirty_mails import GetDirtyMails
 
 
 class MailsFromDomainUrls:
-    def __init__(self, url_list, threads=10):
+    def __init__(self, url_list):
         if not url_list:
             url_list = []
 
         self.url_list = url_list
-        self.threads = threads + 1
         self.start = time.time()
         self.dom_counter = 0
         self.html_instance = GetHtml()  # инстанс для подсчета невалидных ссылок в рамках одного домена
         self.dirty_mails_inst = GetDirtyMails(self.html_instance)   # инстанс для снятия элементов похожих на почту
 
-
-    def multi_threads(self):
+    def one_thread(self):
         url_list = self.url_list
+        dirty_mails_inst = self.dirty_mails_inst
+        counter = len(url_list)
+        for url in url_list:
+            counter -= 1
+            print('запущено потоков: ', threading.active_count() - 1,
+                  'осталось ссылок: ', counter,
+                  'url:  ', url)
+            dirty_mails_inst.place_dirty_mails(url)
+
+        dirty_mails = dirty_mails_inst.all_dirty_mails
+        return FilterMails(dirty_mails).get_clear_unique_mails()
+
+
+    def multi_threads(self, threads=10):
+        threads = threads+1
+        url_list = self.url_list
+        if len(url_list) > 200:
+            url_list = url_list[:200]
         dirty_mails_inst = self.dirty_mails_inst
         counter = len(url_list)
         for url in url_list:
@@ -28,10 +44,10 @@ class MailsFromDomainUrls:
                   'осталось ссылок: ', counter,
                   'url:  ', url)
 
-            while threading.active_count() >= self.threads:
+            while threading.active_count() >= threads:
                 time.sleep(0.5)
 
-            if threading.active_count() < self.threads:
+            if threading.active_count() < threads:
                     threading.Thread(target=dirty_mails_inst.place_dirty_mails, args=(url,)).start()
 
         dirty_mails = dirty_mails_inst.all_dirty_mails

@@ -43,12 +43,14 @@ class GetHtml:
         if status_code == 404:
             return False
 
-        if status_code == 500:
+        if status_code == 500 or status_code == 429:
             self.session.proxies = get_proxy()
+            self.session.headers = ua.random
             try:
                 return self.session.get(url, timeout=4)
             except:
                 return 500
+
 
 
     def get_html(self, url):

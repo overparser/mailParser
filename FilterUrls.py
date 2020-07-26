@@ -1,4 +1,3 @@
-from document import read_lines
 from urllib.parse import urljoin
 import re
 
@@ -58,6 +57,12 @@ class FilterUrls:
                 continue
 
             if '#' in url:
+                continue
+
+            if '.' not in url:
+                continue
+
+            if ';' in url:
                 continue
 
             if 'javascript' in url:
