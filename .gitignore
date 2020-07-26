@@ -128,5 +128,5 @@ dmypy.json
 .idea/
 .idea/vcs.xml
 .idea/vcs.xml
-.proxies.txt
+/text_files
 
