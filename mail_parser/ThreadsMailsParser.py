@@ -13,7 +13,7 @@ class ThreadsMailsParser:
         self.url_list = url_list
         self.start = time.time()
         self.html_instance = GetHtml()  # инстанс для подсчета невалидных ссылок в рамках одного домена
-        self.get_mails_inst = GetMails(self.html_instance)  # инстанс для снятия элементов похожих на почту
+        self.get_mails_inst = GetMails()  # инстанс для снятия элементов похожих на почту
 
     def one_thread(self):
         url_list = self.url_list

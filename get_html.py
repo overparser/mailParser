@@ -46,18 +46,18 @@ class GetHtml:
             self.session.proxies = get_proxy()
             self.session.headers = ua.random
             try:
-                return self.session.get(url, timeout=4)
+                return self.session.get(url, timeout=5)
             except:
                 return 500
 
 
 
     def get_html(self, url):
-        if self.errorCounter < 15:
+        if self.errorCounter < 3:
             if 'http://' not in url and 'https://' not in url:
                 url = 'http://' + url
             try:
-                r = self.session.get(url, timeout=3)
+                r = self.session.get(url, timeout=5)
 
             except:
                 self.domain_counter()

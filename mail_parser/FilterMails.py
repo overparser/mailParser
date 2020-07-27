@@ -31,25 +31,9 @@ class FilterMails:
     def isEnglish(self, s):
         return s.isascii()
 
-
     def is_file(self, url):
-        url = url.lower()
-        if '.jpg' in url:
-            return True
-        if '.jpeg' in url:
-            return True
-        if '.png' in url:
-            return True
-        if '.svg' in url:
-            return True
-        if '.ico' in url:
-            return True
-        if '.pdf' in url:
-            return True
-        if '.txt' in url:
-            return True
-        if '.xml' in url:
-            return True
+        black_list = ['.jpg', '.jpeg', '.png', '.svg', '.ico', '.pdf', '.txt', '.xml', '.mp3', '.mp4', '.avi']
+        return bool([i for i in black_list if i in url.lower()])
 
     @staticmethod
     def regex_mail_from_string(string):

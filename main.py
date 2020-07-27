@@ -53,8 +53,8 @@ def console(domains_count):
     print('########################################################################')
 
 if __name__ == '__main__':
-    domains_count = len(document.read_lines('text_files/input2.txt'))
-    pool(30, step=1000)
-    console(domains_count)
-
+    # domains_count = len(document.read_lines('text_files/input2.txt'))
+    # pool(30, step=1000)
+    # console(domains_count)
+    print(links_from_domain('google.com/'))
 
