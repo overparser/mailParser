@@ -5,10 +5,6 @@ import time
 from mail_parser.ThreadsMailsParser import ThreadsMailsParser
 from multiprocessing import Pool
 
-start = time.time()
-mails_counter = 0
-
-
 
 def links_from_domain(domain):
     dirty_links = get_all_links(domain)
@@ -23,7 +19,6 @@ def multiproc(domain):
 
 
 
-a = 'test123'
 def pool(threads, step):
     domains = document.cut_lines('text_files/input2.txt', step)
     while domains:

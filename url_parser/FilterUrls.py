@@ -12,10 +12,11 @@ class FilterUrls:
     def get_validated_urls(self):
         if self.urls:
             self.urls = list(map(self.href_validation, self.urls))
-            self.regex_filter()
+            self.urls = [i for i in self.urls if i]
+            # self.regex_filter() лагучая ерунда
             self.domain_in_url()
             result = list(set(self.urls))
-            print('выходящие ссылки ', result)
+            print('выходящие ссылки ', len(result), result)
             return result
 
     def set_domain(self, urls):

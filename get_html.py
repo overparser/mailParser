@@ -33,7 +33,6 @@ class GetHtml:
 
     def domain_counter(self):
         self.errorCounter += 1
-        print('error counter: ', self.errorCounter)
 
 
 
@@ -46,7 +45,7 @@ class GetHtml:
             self.session.proxies = get_proxy()
             self.session.headers = ua.random
             try:
-                return self.session.get(url, timeout=5)
+                return self.session.get(url, timeout=3)
             except:
                 return 500
 
@@ -57,7 +56,7 @@ class GetHtml:
             if 'http://' not in url and 'https://' not in url:
                 url = 'http://' + url
             try:
-                r = self.session.get(url, timeout=5)
+                r = self.session.get(url, timeout=3)
 
             except:
                 self.domain_counter()
