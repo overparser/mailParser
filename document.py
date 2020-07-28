@@ -21,6 +21,8 @@ def write_line(path, string, mod='a'):
 
 
 def write_lines(path, strings, mod='a'):
+    strings = strings if type(strings) == list else [strings]
+
     with open(path, mod, encoding='utf8') as file:
         for i in strings:
             if i:

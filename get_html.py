@@ -42,7 +42,6 @@ class GetHtml:
             return False
 
         if status_code == 500 or status_code == 429:
-            self.session.proxies = get_proxy()
             self.session.headers = ua.random
             try:
                 return self.session.get(url, timeout=3)
@@ -60,7 +59,6 @@ class GetHtml:
 
             except:
                 self.domain_counter()
-                write_line('debug_files/timeOutLinks.txt', f'{url}')
                 return False
             i = 0
             status = r.status_code
@@ -69,7 +67,6 @@ class GetHtml:
                 i += 1
                 if i > 10 or not r:
                     self.domain_counter()
-                    write_line('debug_files/wrongStatusCode.txt', f'{status} {url}')
                     return False
             return r
 

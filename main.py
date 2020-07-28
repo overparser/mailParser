@@ -8,7 +8,7 @@ from url_parser.FilterUrls import FilterUrls
 from url_parser.get_all_links import get_all_links
 
 start_program = time.time()
-domains = document.read_lines('text_files/input2.txt')
+domains = document.read_lines('text_files/input.txt')
 
 
 
@@ -48,8 +48,8 @@ def multiproc(domain, step=ASYNCH_LINKS):
             if len(urls): print('осталось проверить ссылок в рамках домена', len(urls), domain_print)
             if time.time() - cycle_time > TIMEOUT_CYCLE_DOMAIN:
                 if time.time() - cycle_time > TIMEOUT_CYCLE_DOMAIN * 2.5:
-                    debug_info = [time.time() - cycle_time, domain]
-                    document.write_lines('debug_files/bad_time.txt', debug_info)
+                    debug_info = '{}    {}'
+                    document.write_lines('debug_files/bad_time.txt', [debug_info.format(time.time() - cycle_time, domain)])
                 print('timeout cycle', domain_print)
                 break
 
@@ -98,16 +98,19 @@ def while_by_step():
     _domains = 0
 
     while domains:
-        domains = document.read_lines('text_files/input2.txt')[:STEP]
-        _domains += len(domains)
         start = time.time()
         all_mails = []
+
+        domains = document.read_lines('text_files/input.txt')[:STEP]
+        _domains += len(domains)
+
         with Pool(POOLS) as p:
             _ = [all_mails.extend(i) for i in p.map(multiproc, domains) if i]
 
         document.write_lines('text_files/mails.txt', all_mails)
         document.write_lines('debug_files/old_domains.txt', domains)
-        document.cut_lines('text_files/input2.txt', STEP)
+        document.cut_lines('text_files/input.txt', STEP)
+
         printer(start, len(all_mails), len(domains))
         _mails += len(all_mails)
 
