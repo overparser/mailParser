@@ -5,7 +5,7 @@ from misc.blacklist import black_list
 
 class FilterUrls:
     def __init__(self, urls):
-        print('входящие ссылки ', len(urls), urls)
+        # print('входящие ссылки ', len(urls), urls)
         self.set_domain(urls)
         self.urls = urls
 
@@ -16,7 +16,7 @@ class FilterUrls:
             # self.regex_filter() лагучая ерунда
             self.domain_in_url()
             result = list(set(self.urls))
-            print('выходящие ссылки ', len(result), result)
+            # print('исходящие ссылки ', len(result), result)
             return result
 
     def set_domain(self, urls):
@@ -86,3 +86,6 @@ class FilterUrls:
 
     def is_file(self, url):
         return bool([i for i in black_list if i in url.lower()])
+
+
+

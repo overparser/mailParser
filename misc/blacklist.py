@@ -28,4 +28,4 @@ black_list =['.3dm',
 '.xul',
 '.jpg',
 '.jpeg',
-'.png', '.svg', '.ico', '.pdf', '.txt', '.xml', '.mp3', '.mp4', '.avi', '.rar']
+'.png', '.svg', '.ico', '.pdf', '.txt', '.xml', '.mp3', '.mp4', '.avi', '.rar', '.ashx']
